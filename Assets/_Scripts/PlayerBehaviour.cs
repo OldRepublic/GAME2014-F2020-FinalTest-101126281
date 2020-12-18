@@ -93,6 +93,8 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        
+
         _LookInFront();
         _isGroundBelow();
         _Move();
@@ -282,6 +284,12 @@ public class PlayerBehaviour : MonoBehaviour
             other.gameObject.GetComponent<MovingPlatformController>().isActive = true;
             transform.SetParent(other.gameObject.transform);
         }
+
+        if (other.gameObject.CompareTag("Shrinking_Platform"))
+        {
+            isGrounded = true;
+            Debug.Log("Enter");
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
@@ -290,6 +298,10 @@ public class PlayerBehaviour : MonoBehaviour
         {
             other.gameObject.GetComponent<MovingPlatformController>().isActive = false;
             transform.SetParent(parent);
+        }
+        if (other.gameObject.CompareTag("Shrinking_Platform"))
+        {
+            Debug.Log("Exit");
         }
     }
 

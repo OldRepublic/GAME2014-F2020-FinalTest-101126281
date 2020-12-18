@@ -341,7 +341,7 @@ GameObject:
   - component: {fileID: 6576027722632789828}
   m_Layer: 0
   m_Name: Shrinking_Platform
-  m_TagString: Untagged
+  m_TagString: Shrinking_Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
