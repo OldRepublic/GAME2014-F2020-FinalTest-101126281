@@ -19,7 +19,7 @@ public class Shrinking_Platform : MonoBehaviour
     {
         
         resetSize();
-        test = true;
+        test = true;//sets reset bool to true and unless set too false criteria met in Ontriggerstay the platform will reset.
     }
 
     void resetSize()
@@ -34,8 +34,6 @@ public class Shrinking_Platform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player") && transform.localScale.x != 0.0f && transform.localScale.y != 0.0f)
         {
-            //Collider = GetComponent<BoxCollider2D>();
-            //Collider.size.Set(0.1f, 0.1f); 
             transform.localScale += Shrink;
             test = false;
         }
@@ -44,7 +42,6 @@ public class Shrinking_Platform : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Player"))
         {
-            //resetSize();
             test = true;
         }
     }
