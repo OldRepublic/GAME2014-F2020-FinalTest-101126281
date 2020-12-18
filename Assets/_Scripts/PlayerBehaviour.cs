@@ -304,6 +304,10 @@ public class PlayerBehaviour : MonoBehaviour
                 TakeDamage(1);
             }
         }
+        if(other.gameObject.CompareTag("Shrinking_Platform"))//makes sure player is grounded on platform
+        {
+            isGrounded = true;
+        }
     }
 
     public void LoseLife()
