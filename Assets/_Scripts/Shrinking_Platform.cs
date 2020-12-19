@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Sounds
+{
+    Shrinking_Sound,
+    Growing_Sound
+}
+
 public class Shrinking_Platform : MonoBehaviour
 {
     Vector3 Shrink;
@@ -9,11 +15,15 @@ public class Shrinking_Platform : MonoBehaviour
     bool test = false;
     float StartLoc;
     float direction = 1.0f;
+
+    public AudioSource[] sounds;
     // Start is called before the first frame update
     void Start()
     {
         Shrink = new Vector3(-0.02f, -0.02f, 0);
         StartLoc = transform.position.y;
+
+        sounds = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -51,6 +61,15 @@ public class Shrinking_Platform : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            sounds[(int)Sounds.Growing_Sound].Stop();
+            sounds[(int)Sounds.Shrinking_Sound].Play();
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)//shrinks platform when in contact with the player
     {
         if(collision.gameObject.CompareTag("Player") && transform.localScale.x != 0.0f && transform.localScale.y != 0.0f)
@@ -64,6 +83,8 @@ public class Shrinking_Platform : MonoBehaviour
         if(collision.gameObject.CompareTag("Player"))
         {
             test = true;
+            sounds[(int)Sounds.Shrinking_Sound].Stop();
+            sounds[(int)Sounds.Growing_Sound].Play();
         }
     }
    
