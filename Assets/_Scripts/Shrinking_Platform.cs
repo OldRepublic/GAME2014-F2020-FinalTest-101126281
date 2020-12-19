@@ -7,19 +7,23 @@ public class Shrinking_Platform : MonoBehaviour
     Vector3 Shrink;
     BoxCollider2D Collider;
     bool test = false;
+    float StartLoc;
+    float direction = 1.0f;
     // Start is called before the first frame update
     void Start()
     {
-        Shrink = new Vector3(-0.02f,-0.02f,0);
-       
+        Shrink = new Vector3(-0.02f, -0.02f, 0);
+        StartLoc = transform.position.y;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
         resetSize();
         test = true;//sets reset bool to true and unless set too false criteria met in Ontriggerstay the platform will reset.
+        floating();
+        CheckBounds();
     }
 
     void resetSize()
@@ -27,6 +31,23 @@ public class Shrinking_Platform : MonoBehaviour
         if (Time.frameCount % 20 == 0 && test == true && transform.localScale.x != 1.0f && transform.localScale.y != 1.0f)
         {
             transform.localScale += -Shrink;
+        }
+    }
+
+    void floating ()
+    {
+        transform.position += new Vector3(0.0f, 0.5f * direction * Time.deltaTime, 0.0f);
+    }
+
+    void CheckBounds()
+    {
+        if (transform.position.y > StartLoc + 0.2f)//the number being added controls the bounds in which the platform floats between
+        {
+            direction = -1.0f;
+        }
+        else if (transform.position.y < StartLoc - 0.2f)
+        {
+            direction = 1.0f;
         }
     }
 
