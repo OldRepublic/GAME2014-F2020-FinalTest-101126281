@@ -93,7 +93,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-
+        
         _LookInFront();
         _isGroundBelow();
         _Move();
@@ -133,13 +133,14 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void _isGroundBelow()
     {
-        if (!OnShrinkingPlat)//With out this player cannot move while on shrinking tile. While OnShrinkPlat is false runs normally while true it stops this check so that we may move and jump while on shrinking platform
-        {//Without the if while we are standing on the shrinking tile isgrounded == false
+        if (OnShrinkingPlat)//Makes sure player counts as being grounded while on shrinking platform
+            isGrounded = true;
+       
             groundHit = Physics2D.CircleCast(transform.position - new Vector3(0.0f, 0.65f, 0.0f), 0.4f, Vector2.down, 0.4f, collisionGroundLayer);
 
 
             isGrounded = (groundHit) ? true : false;
-        }
+      
     }
 
     private void OnDrawGizmos()
@@ -157,7 +158,7 @@ public class PlayerBehaviour : MonoBehaviour
             return false;
         }
 
-        if (groundHit.normal != Vector2.up)
+        if (groundHit.normal != Vector2.up && !OnShrinkingPlat)
         {
             onRamp = true;
             return true;
@@ -169,10 +170,12 @@ public class PlayerBehaviour : MonoBehaviour
 
     void _Move()
     {       
-        if (isGrounded)
+        if (isGrounded || OnShrinkingPlat)
         {
+           
             if (!isJumping && !isCrouching)
             {
+                
                 if (joystick.Horizontal > joystickHorizontalSensitivity)
                 {
                     // move right
@@ -272,7 +275,20 @@ public class PlayerBehaviour : MonoBehaviour
             other.gameObject.SetActive(false);
             HealDamage(10);
         }
+        if(other.gameObject.CompareTag("Shrinking_Platform"))
+        {
+            OnShrinkingPlat = true;
+        }
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Shrinking_Platform"))
+        {
+            OnShrinkingPlat = false;
+        }
+    }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if(collision.gameObject.CompareTag("Shrinking_Platform"))
@@ -301,10 +317,6 @@ public class PlayerBehaviour : MonoBehaviour
         {
             other.gameObject.GetComponent<MovingPlatformController>().isActive = false;
             transform.SetParent(parent);
-        }
-        if (other.gameObject.CompareTag("Shrinking_Platform"))
-        {          
-            OnShrinkingPlat = false;//changes value to false so we can check isgrounded normally again
         }
     }
 
